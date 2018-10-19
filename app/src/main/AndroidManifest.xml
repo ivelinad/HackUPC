@@ -26,7 +26,7 @@
             android:label="@string/title_activity_details"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ProblemsList"
+            android:name=".ProblemsListActivity"
             android:label="@string/title_activity_problems_list"
             android:theme="@style/AppTheme.NoActionBar" />
         <!--
@@ -42,7 +42,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".ProblemsMap"
+            android:name=".ProblemsMapActivity"
             android:label="@string/title_activity_problems_map">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,7 +50,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ReportMap"
+            android:name=".ReportMapActivity"
             android:label="@string/title_activity_report_map"></activity>
     </application>
 
