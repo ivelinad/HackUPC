@@ -74,12 +74,12 @@ public class ReportMapActivity extends FragmentActivity implements OnMapReadyCal
                                     if (location != null) {
                                         Intent i = new Intent(ReportMapActivity.this, AddDetailsActivity.class);
 
-                                        Problem problem = new Problem(location);
+
 
                                         // configure the intent as appropriate
 
                                         // add the location data
-                                        i.putExtra("PROBLEM", problem);
+                                        i.putExtra("PROBLEM", location);
                                         startActivity(i);
                                     } else {
                                         Log.d(TAG, null);

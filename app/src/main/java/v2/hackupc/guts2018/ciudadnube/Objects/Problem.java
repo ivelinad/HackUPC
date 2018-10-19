@@ -4,7 +4,7 @@ import android.location.Location;
 
 import java.io.Serializable;
 
-public class Problem implements Serializable {
+public class Problem{
     private final Location location;
     private String description;
 

@@ -4,6 +4,7 @@ package v2.hackupc.guts2018.ciudadnube;
  *
  */
 
+import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -21,7 +22,7 @@ public class AddDetailsActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
         if(b != null)
-            problem  = (Problem)b.getSerializable("PROBLEM");
+            problem  = new Problem((Location)b.getParcelable("LOCATION"));
 
     }
 }
