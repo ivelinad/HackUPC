@@ -10,4 +10,7 @@
     <string name="google_maps_key">AIzaSyDHTAiif761O5nOGHK-Qriy4SufZM4kHFA</string>
     <string name="image_of_problem">Image of problem</string>
     <string name="add_image">Add image</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="description_hint">Enter short description of the problem</string>
 </resources>
