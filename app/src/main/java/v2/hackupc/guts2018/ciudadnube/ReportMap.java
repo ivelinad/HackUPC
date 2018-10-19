@@ -1,6 +1,6 @@
 package v2.hackupc.guts2018.ciudadnube;
 /*
-* Map view of problems
+* Add marker view
 * */
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -12,14 +12,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class ProblemsMap extends FragmentActivity implements OnMapReadyCallback {
+public class ReportMap extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_problems_map);
+        setContentView(R.layout.activity_report_map);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);

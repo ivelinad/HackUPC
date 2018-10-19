@@ -1,5 +1,7 @@
 package v2.hackupc.guts2018.ciudadnube;
-
+/*
+* List view of problems
+* */
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;

@@ -1,4 +1,8 @@
 package v2.hackupc.guts2018.ciudadnube;
+/**
+ *  Add image, description
+ *
+ */
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
