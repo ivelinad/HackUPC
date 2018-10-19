@@ -5,14 +5,17 @@ package v2.hackupc.guts2018.ciudadnube;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Debug;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -34,7 +37,7 @@ public class ReportMapActivity extends FragmentActivity implements OnMapReadyCal
     private static final String TAG = "mytag";
 
 
-    int PERMISSION_ALL = 1;
+    private static final int PERMISSION_ALL = 1;
     String[] PERMISSIONS = {
             android.Manifest.permission.ACCESS_FINE_LOCATION,
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -54,6 +57,36 @@ public class ReportMapActivity extends FragmentActivity implements OnMapReadyCal
         if(!hasPermissions(this, PERMISSIONS)){
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mMap != null) {
+
+                    mFusedLocationClient.getLastLocation()
+                            .addOnSuccessListener(ReportMapActivity.this, new OnSuccessListener<Location>() {
+                                @Override
+                                public void onSuccess(Location location) {
+                                    // Got last known location. In some rare situations this can be null.
+                                    if (location != null) {
+                                        Intent i = new Intent(ReportMapActivity.this, AddDetailsActivity.class);
+
+                                        // configure the intent as appropriate
+
+                                        // add the location data
+                                        i.putExtra("LOCATION", location);
+                                        startActivity(i);
+                                    } else {
+                                        Log.d(TAG, null);
+                                    }
+                                }
+                            });
+
+
+                }
+            }
+        });
 
     }
 
@@ -113,4 +146,16 @@ public class ReportMapActivity extends FragmentActivity implements OnMapReadyCal
         return true;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case PERMISSION_ALL:
+                // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.map);
+                mapFragment.getMapAsync(this);
+                break;
+        }
+
+    }
 }
