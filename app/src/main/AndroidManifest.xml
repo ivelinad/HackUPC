@@ -43,15 +43,16 @@
 
         <activity
             android:name=".ProblemsMapActivity"
-            android:label="@string/title_activity_problems_map">
+            android:label="@string/title_activity_problems_map"/>
+        <activity
+            android:name=".ReportMapActivity"
+            android:label="@string/title_activity_report_map">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
-        <activity
-            android:name=".ReportMapActivity"
-            android:label="@string/title_activity_report_map"></activity>
     </application>
 
 </manifest>
