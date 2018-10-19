@@ -28,6 +28,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import v2.hackupc.guts2018.ciudadnube.Objects.Problem;
+
 public class ReportMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -72,10 +74,12 @@ public class ReportMapActivity extends FragmentActivity implements OnMapReadyCal
                                     if (location != null) {
                                         Intent i = new Intent(ReportMapActivity.this, AddDetailsActivity.class);
 
+                                        Problem problem = new Problem(location);
+
                                         // configure the intent as appropriate
 
                                         // add the location data
-                                        i.putExtra("LOCATION", location);
+                                        i.putExtra("PROBLEM", problem);
                                         startActivity(i);
                                     } else {
                                         Log.d(TAG, null);

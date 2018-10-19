@@ -2,7 +2,15 @@ package v2.hackupc.guts2018.ciudadnube.Objects;
 
 import android.location.Location;
 
-public class Problem {
-    //private final Location location;
+import java.io.Serializable;
+
+public class Problem implements Serializable {
+    private final Location location;
+    private String description;
+
+    public Problem(Location location){
+        this.location = location;
+        this.description = "";
+    }
 
 }
