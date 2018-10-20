@@ -8,6 +8,7 @@ public class Problem{
     private final double lat;
     private final double lng;
     private String description;
+    private String imageUrl;
 
     public Problem(Location location){
         this.lat = location.getLatitude();
@@ -27,7 +28,15 @@ public class Problem{
         return lat;
     }
 
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public Double getLng(){
         return lng;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 }
