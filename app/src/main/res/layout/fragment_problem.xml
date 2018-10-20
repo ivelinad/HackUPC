@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_margin="@dimen/text_margin"
         android:background="@android:drawable/ic_menu_gallery"
         android:textAppearance="?attr/textAppearanceListItem" />

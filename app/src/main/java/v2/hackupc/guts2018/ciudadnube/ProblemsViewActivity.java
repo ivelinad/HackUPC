@@ -3,6 +3,7 @@ package v2.hackupc.guts2018.ciudadnube;
 * Map view of problems
 * */
 
+import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
@@ -41,6 +42,9 @@ public class ProblemsViewActivity extends FragmentActivity implements MapFragmen
         fragmentContainer = findViewById(R.id.fragment_container);
 
 
+        // Download data and show it
+
+        // TODO remove dummy data
         final ArrayList<Problem> problems = new ArrayList<>();
 
         Location dummyLoc = new Location("");
@@ -52,7 +56,7 @@ public class ProblemsViewActivity extends FragmentActivity implements MapFragmen
             problem.setDescription("DUMMMY DEEEEEEEEEEEEESCRIPTIONNNNNNNNNNNNNNNNNNNNNNN");
             problem.setImageUrl("https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png");
             problems.add(problem);
-        }
+        } // TODO----------------------
 
 
         MapFragment mapFragment = MapFragment.newInstance(problems);
@@ -128,6 +132,8 @@ public class ProblemsViewActivity extends FragmentActivity implements MapFragmen
 
     @Override
     public void onListFragmentInteraction(Problem item) {
-
+        Intent i = new Intent(ProblemsViewActivity.this, DetailsActivity.class);
+        i.putExtra("PROBLEM", item);
+        startActivity(i);
     }
 }

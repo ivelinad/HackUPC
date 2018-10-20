@@ -8,7 +8,7 @@ import android.util.Base64;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
-public class Problem{
+public class Problem implements  Serializable{
     private final double lat;
     private final double lng;
     private String description;
