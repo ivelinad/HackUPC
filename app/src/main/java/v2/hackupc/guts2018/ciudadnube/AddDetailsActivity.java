@@ -112,89 +112,94 @@ public class AddDetailsActivity extends AppCompatActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                problem.setDescription(descriptionTextView.getText().toString());
-                problem.setImagePath(selectedImageUri.getPath());
 
-                String timeStamp = String.valueOf(System.currentTimeMillis()); // name of file and also id of database entry
+                if(descriptionTextView.getText().length() > 0 && selectedImageUri != null){
+                    problem.setDescription(descriptionTextView.getText().toString());
+                    problem.setImagePath(selectedImageUri.getPath());
 
-                TransferUtility transferUtility =
-                        TransferUtility.builder()
-                                .context(getApplicationContext())
-                                .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
-                                .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
-                                .build();
+                    String timeStamp = String.valueOf(System.currentTimeMillis()); // name of file and also id of database entry
 
-                String realPath = ImageFilePath.getPath(AddDetailsActivity.this, selectedImageUri);
+                    TransferUtility transferUtility =
+                            TransferUtility.builder()
+                                    .context(getApplicationContext())
+                                    .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
+                                    .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
+                                    .build();
+
+                    String realPath = ImageFilePath.getPath(AddDetailsActivity.this, selectedImageUri);
 
 
-                File file = new File(realPath);
+                    File file = new File(realPath);
 
-                TransferObserver uploadObserver =
-                        transferUtility.upload(
-                                timeStamp + ".jpg",
-                                file);
+                    TransferObserver uploadObserver =
+                            transferUtility.upload(
+                                    timeStamp + ".jpg",
+                                    file);
 
-                // Attach a listener to the observer to get state update and progress notifications
-                uploadObserver.setTransferListener(new TransferListener() {
+                    // Attach a listener to the observer to get state update and progress notifications
+                    uploadObserver.setTransferListener(new TransferListener() {
 
-                    @Override
-                    public void onStateChanged(int id, TransferState state) {
-                        if (TransferState.COMPLETED == state) {
-                            // Handle a completed upload.
-                            Toast.makeText(AddDetailsActivity.this, "Upload complete", Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    @Override
-                    public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                        float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
-                        int percentDone = (int)percentDonef;
-
-                        Log.d("YourActivity", "ID:" + id + " bytesCurrent: " + bytesCurrent
-                                + " bytesTotal: " + bytesTotal + " " + percentDone + "%");
-                    }
-
-                    @Override
-                    public void onError(int id, Exception ex) {
-                        // Handle errors
-                        Log.e("UploadError", "UploadError", ex);
-                    }
-
-                });
-
-                // If you prefer to poll for the data, instead of attaching a
-                // listener, check for the state and progress in the observer.
-//                if (TransferState.COMPLETED == uploadObserver.getState()) {
-//                    // Handle a completed upload.
-//                    Toast.makeText(AddDetailsActivity.this, "Upload complete", Toast.LENGTH_LONG).show();
-//                }
-
-                Request r = new Request(problem.getLat(), problem.getLng(), problem.getDescription(), problem.getImageAsString(), "POST", timeStamp);
-
-                new AsyncTask<Request, Void, Response>() {
-                    @Override
-                    protected Response doInBackground(Request... params) {
-                        // invoke "echo" method. In case it fails, it will throw a
-                        // LambdaFunctionException.
-                        try {
-                            return myInterface.SaveLocationToDB(params[0]);
-                        } catch (LambdaFunctionException lfe) {
-                            Log.e("Failed to invoke echo", "Failed to invoke echo", lfe);
-                            return null;
-                        }
-                    }
-
-                    @Override
-                    protected void onPostExecute(Response result) {
-                        if (result == null) {
-                            Log.d("RETURN", "NO DATA RETURNED");
-                            return;
+                        @Override
+                        public void onStateChanged(int id, TransferState state) {
+                            if (TransferState.COMPLETED == state) {
+                                // Handle a completed upload.
+                                Toast.makeText(AddDetailsActivity.this, "Upload complete", Toast.LENGTH_LONG).show();
+                            }
                         }
 
-                        // Do a toast
-                        Toast.makeText(AddDetailsActivity.this, result.getResponse(), Toast.LENGTH_LONG).show();
-                    }
-                }.execute(r);
+                        @Override
+                        public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                            float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
+                            int percentDone = (int)percentDonef;
+
+                            Log.d("YourActivity", "ID:" + id + " bytesCurrent: " + bytesCurrent
+                                    + " bytesTotal: " + bytesTotal + " " + percentDone + "%");
+                        }
+
+                        @Override
+                        public void onError(int id, Exception ex) {
+                            // Handle errors
+                            Log.e("UploadError", "UploadError", ex);
+                        }
+
+                    });
+
+                    // If you prefer to poll for the data, instead of attaching a
+                    // listener, check for the state and progress in the observer.
+    //                if (TransferState.COMPLETED == uploadObserver.getState()) {
+    //                    // Handle a completed upload.
+    //                    Toast.makeText(AddDetailsActivity.this, "Upload complete", Toast.LENGTH_LONG).show();
+    //                }
+
+                    Request r = new Request(problem.getLat(), problem.getLng(), problem.getDescription(), "", "POST", timeStamp);
+
+                    new AsyncTask<Request, Void, Response>() {
+                        @Override
+                        protected Response doInBackground(Request... params) {
+                            // invoke "echo" method. In case it fails, it will throw a
+                            // LambdaFunctionException.
+                            try {
+                                return myInterface.SaveLocationToDB(params[0]);
+                            } catch (LambdaFunctionException lfe) {
+                                Log.e("Failed to invoke echo", "Failed to invoke echo", lfe);
+                                return null;
+                            }
+                        }
+
+                        @Override
+                        protected void onPostExecute(Response result) {
+                            if (result == null) {
+                                Log.d("RETURN", "NO DATA RETURNED");
+                                return;
+                            }
+
+                            // Do a toast
+                            Toast.makeText(AddDetailsActivity.this, result.getResponse(), Toast.LENGTH_LONG).show();
+                        }
+                    }.execute(r);
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.missing_fields), Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -207,23 +212,6 @@ public class AddDetailsActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    public static String getPath(Context context, Uri uri ) {
-        String result = null;
-        String[] proj = { MediaStore.Images.Media.DATA };
-        Cursor cursor = context.getContentResolver( ).query( uri, proj, null, null, null );
-        if(cursor != null){
-            if ( cursor.moveToFirst( ) ) {
-                int column_index = cursor.getColumnIndexOrThrow( proj[0] );
-                result = cursor.getString( column_index );
-            }
-            cursor.close( );
-        }
-        if(result == null) {
-            result = "Not found";
-        }
-        return result;
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
