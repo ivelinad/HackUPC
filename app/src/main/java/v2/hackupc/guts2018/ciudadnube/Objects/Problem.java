@@ -15,6 +15,7 @@ public class Problem implements  Serializable{
     private String imageUrl;
     private String imagePath;
 
+
     public Problem(Location location){
         this.lat = location.getLatitude();
         this.lng = location.getLongitude();

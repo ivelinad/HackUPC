@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,6 +32,7 @@ public class DetailsActivity extends AppCompatActivity {
             Problem problem = (Problem)b.getSerializable("PROBLEM");
             ImageView imageView = findViewById(R.id.imageView2);
             TextView descriptionTv = findViewById(R.id.description);
+            Button solved = findViewById(R.id.solved);
 
             Picasso.get().load(problem.getImageUrl()).fit().centerCrop()
                     .placeholder(android.R.drawable.ic_menu_gallery)
