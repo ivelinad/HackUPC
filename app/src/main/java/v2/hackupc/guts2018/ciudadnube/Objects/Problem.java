@@ -5,11 +5,13 @@ import android.location.Location;
 import java.io.Serializable;
 
 public class Problem{
-    private final Location location;
+    private final double lat;
+    private final double lng;
     private String description;
 
     public Problem(Location location){
-        this.location = location;
+        this.lat = location.getLatitude();
+        this.lng = location.getLongitude();
         this.description = "";
     }
 
@@ -22,10 +24,10 @@ public class Problem{
     }
 
     public Double getLat(){
-        return location.getLatitude();
+        return lat;
     }
 
     public Double getLng(){
-        return location.getLongitude();
+        return lng;
     }
 }
