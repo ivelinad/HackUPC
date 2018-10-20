@@ -24,4 +24,5 @@
     <string name="placeholder_for_description">Placeholder for description</string>
     <string name="missing_fields">Some fields are missing</string>
     <string name="title_activity_splash_screen">SplashScreen</string>
+    <string name="missing_image">Please upload image</string>
 </resources>
