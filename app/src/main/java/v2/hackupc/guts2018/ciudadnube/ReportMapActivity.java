@@ -14,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,7 +33,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import v2.hackupc.guts2018.ciudadnube.Objects.Problem;
 
-public class ReportMapActivity extends FragmentActivity implements OnMapReadyCallback {
+public class ReportMapActivity extends AppCompatActivity
+        implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationClient;
