@@ -1,4 +1,4 @@
-package v2.hackupc.guts2018.ciudadnube;
+package v2.hackupc.guts2018.ciudadnube.Lambda;
 
 public class UploadImageRequest {
 

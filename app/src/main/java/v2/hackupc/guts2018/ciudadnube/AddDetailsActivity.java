@@ -35,9 +35,14 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.IOException;
 
+import id.zelory.compressor.Compressor;
 import v2.hackupc.guts2018.ciudadnube.Algorithms.ImageFilePath;
 import v2.hackupc.guts2018.ciudadnube.Objects.Problem;
+import v2.hackupc.guts2018.ciudadnube.Lambda.MyInterface;
+import v2.hackupc.guts2018.ciudadnube.Lambda.Request;
+import v2.hackupc.guts2018.ciudadnube.Lambda.Response;
 
 public class AddDetailsActivity extends AppCompatActivity {
 
@@ -119,6 +124,13 @@ public class AddDetailsActivity extends AppCompatActivity {
 
 
                     File file = new File(realPath);
+
+                    try {
+                        file = new Compressor(AddDetailsActivity.this).compressToFile(file);
+                        Log.d("Image Compression", "Image compression passed");
+                    } catch (IOException e){
+                        Log.d("Image Compression", "Image compression failed", e);
+                    }
 
                     TransferObserver uploadObserver =
                             transferUtility.upload(
