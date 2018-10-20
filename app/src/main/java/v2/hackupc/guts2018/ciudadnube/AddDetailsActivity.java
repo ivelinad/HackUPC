@@ -117,7 +117,7 @@ public class AddDetailsActivity extends AppCompatActivity {
                     problem.setDescription(descriptionTextView.getText().toString());
                     problem.setImagePath(selectedImageUri.getPath());
 
-                    String timeStamp = String.valueOf(System.currentTimeMillis()); // name of file and also id of database entry
+                    final String timeStamp = String.valueOf(System.currentTimeMillis()); // name of file and also id of database entry
 
                     TransferUtility transferUtility =
                             TransferUtility.builder()
@@ -143,17 +143,43 @@ public class AddDetailsActivity extends AppCompatActivity {
                         public void onStateChanged(int id, TransferState state) {
                             if (TransferState.COMPLETED == state) {
                                 // Handle a completed upload.
-                                Toast.makeText(AddDetailsActivity.this, "Upload complete", Toast.LENGTH_LONG).show();
+                                Toast.makeText(AddDetailsActivity.this, "Please Wait", Toast.LENGTH_LONG).show();
+
+                                Request r = new Request(problem.getLat(), problem.getLng(), problem.getDescription(), "https://s3.amazonaws.com/hackupc-images/"+timeStamp+".jpg", timeStamp);
+
+                                new AsyncTask<Request, Void, Response>() {
+                                    @Override
+                                    protected Response doInBackground(Request... params) {
+                                        // invoke "echo" method. In case it fails, it will throw a
+                                        // LambdaFunctionException.
+                                        try {
+                                            return myInterface.SaveLocationToDB(params[0]);
+                                        } catch (LambdaFunctionException lfe) {
+                                            Log.e("Failed to invoke echo", "Failed to invoke echo", lfe);
+                                            return null;
+                                        }
+                                    }
+
+                                    @Override
+                                    protected void onPostExecute(Response result) {
+                                        if (result == null) {
+                                            Log.d("RETURN", "NO DATA RETURNED");
+                                            return;
+                                        }
+
+                                        // Do a toast
+                                        Toast.makeText(AddDetailsActivity.this, "Location added", Toast.LENGTH_LONG).show();
+                                        // go back to previous activity
+                                        Intent i = new Intent(AddDetailsActivity.this, ReportMapActivity.class);
+                                        startActivity(i);
+                                    }
+                                }.execute(r);
                             }
                         }
 
                         @Override
                         public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                            float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
-                            int percentDone = (int)percentDonef;
 
-                            Log.d("YourActivity", "ID:" + id + " bytesCurrent: " + bytesCurrent
-                                    + " bytesTotal: " + bytesTotal + " " + percentDone + "%");
                         }
 
                         @Override
@@ -163,40 +189,6 @@ public class AddDetailsActivity extends AppCompatActivity {
                         }
 
                     });
-
-                    // If you prefer to poll for the data, instead of attaching a
-                    // listener, check for the state and progress in the observer.
-    //                if (TransferState.COMPLETED == uploadObserver.getState()) {
-    //                    // Handle a completed upload.
-    //                    Toast.makeText(AddDetailsActivity.this, "Upload complete", Toast.LENGTH_LONG).show();
-    //                }
-
-                    Request r = new Request(problem.getLat(), problem.getLng(), problem.getDescription(), "", "POST", timeStamp);
-
-                    new AsyncTask<Request, Void, Response>() {
-                        @Override
-                        protected Response doInBackground(Request... params) {
-                            // invoke "echo" method. In case it fails, it will throw a
-                            // LambdaFunctionException.
-                            try {
-                                return myInterface.SaveLocationToDB(params[0]);
-                            } catch (LambdaFunctionException lfe) {
-                                Log.e("Failed to invoke echo", "Failed to invoke echo", lfe);
-                                return null;
-                            }
-                        }
-
-                        @Override
-                        protected void onPostExecute(Response result) {
-                            if (result == null) {
-                                Log.d("RETURN", "NO DATA RETURNED");
-                                return;
-                            }
-
-                            // Do a toast
-                            Toast.makeText(AddDetailsActivity.this, result.getResponse(), Toast.LENGTH_LONG).show();
-                        }
-                    }.execute(r);
                 } else {
                     Toast.makeText(getApplicationContext(), getString(R.string.missing_fields), Toast.LENGTH_LONG).show();
                 }

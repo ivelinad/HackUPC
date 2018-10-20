@@ -6,7 +6,6 @@ public class Request {
     double lng;
     String description;
     String url;
-    String method;
     String time;
 
 
@@ -30,14 +29,6 @@ public class Request {
         return url;
     }
 
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
     public void setDescription(String description){
         this.description = description;
     }
@@ -58,12 +49,11 @@ public class Request {
         this.lng = lng;
     }
 
-    public Request(double lat, double lng, String description, String url, String method, String time){
+    public Request(double lat, double lng, String description, String url, String time){
         this.description = description;
         this.lat = lat;
         this.lng = lng;
         this.url = url;
-        this.method = method;
         this.time = time;
     }
 
