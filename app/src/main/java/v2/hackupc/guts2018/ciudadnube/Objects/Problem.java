@@ -13,4 +13,19 @@ public class Problem{
         this.description = "";
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Double getLat(){
+        return location.getLatitude();
+    }
+
+    public Double getLng(){
+        return location.getLongitude();
+    }
 }

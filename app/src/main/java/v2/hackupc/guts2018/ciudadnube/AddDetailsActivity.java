@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -24,6 +26,7 @@ public class AddDetailsActivity extends AppCompatActivity {
     public Problem problem;
     private final static int SELECT_PICTURE = 0;
     private ImageView imageView;
+    private EditText descriptionTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class AddDetailsActivity extends AppCompatActivity {
             problem  = new Problem((Location)b.getParcelable("LOCATION"));
 
         imageView = findViewById(R.id.imageView);
+        descriptionTextView = findViewById(R.id.description);
 
         int productImageId = getResources().getIdentifier(
                 "ic_photo_placeholder", "drawable", getPackageName());
@@ -59,6 +63,25 @@ public class AddDetailsActivity extends AppCompatActivity {
                     }
                 });
 
+        Button confirm = findViewById(R.id.confirm);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                problem.setDescription(descriptionTextView.getText().toString());
+
+                // send stuff to amazon boi
+            }
+        });
+
+        Button cancel = findViewById(R.id.cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(AddDetailsActivity.this, ReportMapActivity.class);
+                startActivity(i);
+            }
+        });
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -72,6 +95,4 @@ public class AddDetailsActivity extends AppCompatActivity {
             }
         }
     }
-
-
 }
