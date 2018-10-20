@@ -5,10 +5,13 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.util.Base64;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
+
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
-public class Problem implements  Serializable{
+public class Problem implements  Serializable, ClusterItem {
     private final double lat;
     private final double lng;
     private String description;
@@ -57,5 +60,10 @@ public class Problem implements  Serializable{
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    @Override
+    public LatLng getPosition() {
+        return new LatLng(lat,lng);
     }
 }

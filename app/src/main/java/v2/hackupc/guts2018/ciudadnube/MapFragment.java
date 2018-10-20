@@ -26,11 +26,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.algo.GridBasedAlgorithm;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import v2.hackupc.guts2018.ciudadnube.Algorithms.NonHierarchicalDistanceBasedAlgorithm;
 import v2.hackupc.guts2018.ciudadnube.Objects.Problem;
 
 
@@ -47,13 +50,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
     private OnFragmentInteractionListener mListener;
-    private Context mContext;
     private ArrayList<Problem> problems;
     private GoogleMap mMap;
     private static boolean permissionsGranted = false;
     private static final int PERMISSION_ALL = 1;
     private FusedLocationProviderClient mFusedLocationClient;
     private HashMap<Marker,Problem> markers;
+    // Declare a variable for the cluster manager.
+    private ClusterManager<Problem> mClusterManager;
+
     String[] PERMISSIONS = {
             android.Manifest.permission.ACCESS_FINE_LOCATION,
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -113,7 +118,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mContext = context;
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -125,7 +129,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onDetach() {
         super.onDetach();
-        mContext = null;
         mListener = null;
     }
 
@@ -160,6 +163,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
 
         markers = new HashMap<>();
+
+        // Initialize the manager with the context and the map.
+        // (Activity extends context, so we can pass 'this' in the constructor.)
+        mClusterManager = new ClusterManager<>(getActivity(), mMap);
+        mClusterManager.setAlgorithm(new NonHierarchicalDistanceBasedAlgorithm<Problem>());
+        // Point the map's listeners at the listeners implemented by the cluster
+        // manager.
+        final CameraPosition[] mPreviousCameraPosition = {null};
+        googleMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                CameraPosition position = mMap.getCameraPosition();
+                if(mPreviousCameraPosition[0] == null || mPreviousCameraPosition[0].zoom != position.zoom) {
+                    mPreviousCameraPosition[0] = mMap.getCameraPosition();
+                    mClusterManager.cluster();
+                }
+            }
+        });
+        mMap.setOnMarkerClickListener(mClusterManager);
+
+
         for(Problem p:problems){
 
             LatLng latlng = new LatLng(p.getLat(), p.getLng());
@@ -168,21 +192,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
             // Setting the position for the marker
             markerOptions.position(latlng);
-
-            Marker m = mMap.addMarker(markerOptions);
-            markers.put(m, p);
+            mClusterManager.addItem(p);
+            //markers.put(m, p);
             //mMap.setOnMarkerClickListener(this);
         }
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+        mClusterManager.cluster();
+        mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<Problem>() {
             @Override
-            public boolean onMarkerClick(Marker marker) {
+            public boolean onClusterItemClick(Problem problem) {
                 Intent i = new Intent(getActivity(), DetailsActivity.class);
-                i.putExtra("PROBLEM", markers.get(marker));
+                i.putExtra("PROBLEM", problem);
                 startActivity(i);
                 return true;
             }
         });
-
     }
 
 

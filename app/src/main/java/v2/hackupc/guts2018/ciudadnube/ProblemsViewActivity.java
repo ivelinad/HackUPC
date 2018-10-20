@@ -47,16 +47,29 @@ public class ProblemsViewActivity extends FragmentActivity implements MapFragmen
         // TODO remove dummy data
         final ArrayList<Problem> problems = new ArrayList<>();
 
-        Location dummyLoc = new Location("");
-        dummyLoc.setLatitude(0.0d);//your coords of course
-        dummyLoc.setLongitude(0.0d);
+
 
         for(int i = 0; i<12;i++){
+            Location dummyLoc = new Location("");
+            dummyLoc.setLatitude(0.0d +i*0.0001);//your coords of course
+            dummyLoc.setLongitude(0.0d+i*0.001);
+
             Problem problem = new Problem(dummyLoc);
             problem.setDescription("DUMMMY DEEEEEEEEEEEEESCRIPTIONNNNNNNNNNNNNNNNNNNNNNN");
             problem.setImageUrl("https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png");
             problems.add(problem);
-        } // TODO----------------------
+        }
+
+        for(int i = 0; i<40;i++){
+            Location dummyLoc2 = new Location("");
+            dummyLoc2.setLatitude(41.3918234d+i*0.003);//your coords of course
+            dummyLoc2.setLongitude(2.1155787d-i*0.0004);
+            Problem problem = new Problem(dummyLoc2);
+            problem.setDescription("DUMMMY DEEEEEEEEEEEEESCRIPTIONNNNNNNNNNNNNNNNNNNNNNN");
+            problem.setImageUrl("https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png");
+            problems.add(problem);
+        }
+        // TODO----------------------
 
 
         MapFragment mapFragment = MapFragment.newInstance(problems);
