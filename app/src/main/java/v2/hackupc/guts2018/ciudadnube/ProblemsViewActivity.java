@@ -3,20 +3,28 @@ package v2.hackupc.guts2018.ciudadnube;
 * Map view of problems
 * */
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
+import com.amazonaws.mobileconnectors.lambdainvoker.LambdaInvokerFactory;
+import com.amazonaws.regions.Regions;
 import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
@@ -33,7 +41,7 @@ public class ProblemsViewActivity extends FragmentActivity implements MapFragmen
     private static final String PROBLEM_FRAGMENT = "problem";
     FrameLayout fragmentContainer;
 
-
+    @SuppressLint("StaticFieldLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +51,45 @@ public class ProblemsViewActivity extends FragmentActivity implements MapFragmen
 
 
         // Download data and show it
+        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
+                getApplicationContext(),
+                "us-east-1:30b87aaa-5633-4ef0-bae2-4d36c3ab731d", // Identity pool ID
+                Regions.US_EAST_1 // Region
+        );
+
+        LambdaInvokerFactory factory = LambdaInvokerFactory.builder().context(getApplicationContext()).region(Regions.US_EAST_1).credentialsProvider(credentialsProvider).build();
+
+        final MyInterface myInterface = factory.build(MyInterface.class);
+
+        AllDataRequest dataRequest = new AllDataRequest();
+
+//        Request r = new Request(problem.getLat(), problem.getLng(), problem.getDescription(), "test", "POST", timeStamp);
+
+        new AsyncTask<AllDataRequest, Void, AllDataResponse>() {
+            @Override
+            protected AllDataResponse doInBackground(AllDataRequest... params) {
+                // invoke "echo" method. In case it fails, it will throw a
+                // LambdaFunctionException.
+                try {
+                    return myInterface.GetAllData(params[0]);
+                } catch (LambdaFunctionException lfe) {
+                    Log.e("Failed to invoke echo", "Failed to invoke echo", lfe);
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(AllDataResponse result) {
+                if (result == null) {
+                    Log.d("RETURN", "NO DATA RETURNED");
+                    return;
+                }
+
+                // Do a toast
+                Toast.makeText(ProblemsViewActivity.this, result.toString(), Toast.LENGTH_LONG).show();
+            }
+        }.execute(dataRequest);
+
 
         // TODO remove dummy data
         final ArrayList<Problem> problems = new ArrayList<>();
