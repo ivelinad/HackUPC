@@ -22,10 +22,20 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaInvokerFactory;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.squareup.picasso.Picasso;
+import com.amazonaws.mobile.config.AWSConfiguration;
+import com.amazonaws.mobileconnectors.s3.transferutility.*;
+
+import java.io.File;
 
 import v2.hackupc.guts2018.ciudadnube.Objects.Problem;
 
@@ -40,6 +50,7 @@ public class AddDetailsActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AWSMobileClient.getInstance().initialize(this).execute();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_details);
 
@@ -91,8 +102,56 @@ public class AddDetailsActivity extends AppCompatActivity {
                 problem.setDescription(descriptionTextView.getText().toString());
                 problem.setImagePath(selectedImageUri.getPath());
 
-                // send stuff to amazon boi
-                Request r = new Request(problem.getLat(), problem.getLng(), problem.getDescription(), problem.getImageAsString(), "POST");
+                String timeStamp = String.valueOf(System.currentTimeMillis()); // name of file and also id of database entry
+
+                TransferUtility transferUtility =
+                        TransferUtility.builder()
+                                .context(getApplicationContext())
+                                .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
+                                .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
+                                .build();
+
+                TransferObserver uploadObserver =
+                        transferUtility.upload(
+                                timeStamp + ".jpg",
+                                new File(problem.getImagePath()));
+
+                // Attach a listener to the observer to get state update and progress notifications
+                uploadObserver.setTransferListener(new TransferListener() {
+
+                    @Override
+                    public void onStateChanged(int id, TransferState state) {
+                        if (TransferState.COMPLETED == state) {
+                            // Handle a completed upload.
+                            Toast.makeText(AddDetailsActivity.this, "Upload complete", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                        float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
+                        int percentDone = (int)percentDonef;
+
+                        Log.d("YourActivity", "ID:" + id + " bytesCurrent: " + bytesCurrent
+                                + " bytesTotal: " + bytesTotal + " " + percentDone + "%");
+                    }
+
+                    @Override
+                    public void onError(int id, Exception ex) {
+                        // Handle errors
+                        Log.e("UploadError", "UploadError", ex);
+                    }
+
+                });
+
+                // If you prefer to poll for the data, instead of attaching a
+                // listener, check for the state and progress in the observer.
+//                if (TransferState.COMPLETED == uploadObserver.getState()) {
+//                    // Handle a completed upload.
+//                    Toast.makeText(AddDetailsActivity.this, "Upload complete", Toast.LENGTH_LONG).show();
+//                }
+
+                Request r = new Request(problem.getLat(), problem.getLng(), problem.getDescription(), problem.getImageAsString(), "POST", timeStamp);
 
                 new AsyncTask<Request, Void, Response>() {
                     @Override

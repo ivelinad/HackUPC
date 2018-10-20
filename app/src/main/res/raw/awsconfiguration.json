@@ -1,0 +1,20 @@
+{
+    "Version": "1.0",
+    "IdentityManager": {
+        "Default": {}
+    },
+    "CredentialsProvider": {
+        "CognitoIdentity": {
+            "Default": {
+                "PoolId": "us-east-1:30b87aaa-5633-4ef0-bae2-4d36c3ab731d",
+                "Region": "us-east-1"
+            }
+        }
+    },
+    "S3TransferUtility": {
+        "Default": {
+            "Bucket": "hackupc-images",
+            "Region": "us-east-1"
+        }
+    }
+}

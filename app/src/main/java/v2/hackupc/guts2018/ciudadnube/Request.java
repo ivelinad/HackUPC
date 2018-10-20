@@ -7,6 +7,16 @@ public class Request {
     String description;
     String url;
     String method;
+    String time;
+
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
 
     public String getDescription(){
         return description;
@@ -48,12 +58,13 @@ public class Request {
         this.lng = lng;
     }
 
-    public Request(double lat, double lng, String description, String url, String method){
+    public Request(double lat, double lng, String description, String url, String method, String time){
         this.description = description;
         this.lat = lat;
         this.lng = lng;
         this.url = url;
         this.method = method;
+        this.time = time;
     }
 
     public Request(){

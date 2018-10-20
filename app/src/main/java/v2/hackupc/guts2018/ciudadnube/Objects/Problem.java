@@ -25,6 +25,10 @@ public class Problem implements  Serializable, ClusterItem {
         this.description = "";
     }
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
