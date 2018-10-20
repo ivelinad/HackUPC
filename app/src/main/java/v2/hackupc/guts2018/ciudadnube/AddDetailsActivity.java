@@ -136,6 +136,7 @@ public class AddDetailsActivity extends AppCompatActivity {
                                     timeStamp + ".jpg",
                                     file);
 
+                    Toast.makeText(AddDetailsActivity.this, "Please Wait", Toast.LENGTH_SHORT).show();
                     // Attach a listener to the observer to get state update and progress notifications
                     uploadObserver.setTransferListener(new TransferListener() {
 
@@ -143,7 +144,6 @@ public class AddDetailsActivity extends AppCompatActivity {
                         public void onStateChanged(int id, TransferState state) {
                             if (TransferState.COMPLETED == state) {
                                 // Handle a completed upload.
-                                Toast.makeText(AddDetailsActivity.this, "Please Wait", Toast.LENGTH_SHORT).show();
 
                                 Request r = new Request(problem.getLat(), problem.getLng(), problem.getDescription(), "https://s3.amazonaws.com/hackupc-images/"+timeStamp+".jpg", timeStamp);
 
