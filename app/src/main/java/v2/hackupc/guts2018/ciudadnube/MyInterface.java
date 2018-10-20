@@ -7,4 +7,7 @@ public interface MyInterface {
 
     @LambdaFunction
     UploadImageResponse UploadImage(UploadImageRequest request);
+
+    @LambdaFunction
+    AllDataResponse GetAllData(AllDataRequest request);
 }

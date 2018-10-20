@@ -104,45 +104,45 @@ public class AddDetailsActivity extends AppCompatActivity {
 
                 String timeStamp = String.valueOf(System.currentTimeMillis()); // name of file and also id of database entry
 
-                TransferUtility transferUtility =
-                        TransferUtility.builder()
-                                .context(getApplicationContext())
-                                .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
-                                .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
-                                .build();
-
-                TransferObserver uploadObserver =
-                        transferUtility.upload(
-                                timeStamp + ".jpg",
-                                new File(problem.getImagePath()));
-
-                // Attach a listener to the observer to get state update and progress notifications
-                uploadObserver.setTransferListener(new TransferListener() {
-
-                    @Override
-                    public void onStateChanged(int id, TransferState state) {
-                        if (TransferState.COMPLETED == state) {
-                            // Handle a completed upload.
-                            Toast.makeText(AddDetailsActivity.this, "Upload complete", Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    @Override
-                    public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                        float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
-                        int percentDone = (int)percentDonef;
-
-                        Log.d("YourActivity", "ID:" + id + " bytesCurrent: " + bytesCurrent
-                                + " bytesTotal: " + bytesTotal + " " + percentDone + "%");
-                    }
-
-                    @Override
-                    public void onError(int id, Exception ex) {
-                        // Handle errors
-                        Log.e("UploadError", "UploadError", ex);
-                    }
-
-                });
+//                TransferUtility transferUtility =
+//                        TransferUtility.builder()
+//                                .context(getApplicationContext())
+//                                .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
+//                                .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
+//                                .build();
+//
+//                TransferObserver uploadObserver =
+//                        transferUtility.upload(
+//                                timeStamp + ".jpg",
+//                                new File(problem.getImagePath()));
+//
+//                // Attach a listener to the observer to get state update and progress notifications
+//                uploadObserver.setTransferListener(new TransferListener() {
+//
+//                    @Override
+//                    public void onStateChanged(int id, TransferState state) {
+//                        if (TransferState.COMPLETED == state) {
+//                            // Handle a completed upload.
+//                            Toast.makeText(AddDetailsActivity.this, "Upload complete", Toast.LENGTH_LONG).show();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+//                        float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
+//                        int percentDone = (int)percentDonef;
+//
+//                        Log.d("YourActivity", "ID:" + id + " bytesCurrent: " + bytesCurrent
+//                                + " bytesTotal: " + bytesTotal + " " + percentDone + "%");
+//                    }
+//
+//                    @Override
+//                    public void onError(int id, Exception ex) {
+//                        // Handle errors
+//                        Log.e("UploadError", "UploadError", ex);
+//                    }
+//
+//                });
 
                 // If you prefer to poll for the data, instead of attaching a
                 // listener, check for the state and progress in the observer.
@@ -151,7 +151,7 @@ public class AddDetailsActivity extends AppCompatActivity {
 //                    Toast.makeText(AddDetailsActivity.this, "Upload complete", Toast.LENGTH_LONG).show();
 //                }
 
-                Request r = new Request(problem.getLat(), problem.getLng(), problem.getDescription(), problem.getImageAsString(), "POST", timeStamp);
+                Request r = new Request(problem.getLat(), problem.getLng(), problem.getDescription(), "test", "POST", timeStamp);
 
                 new AsyncTask<Request, Void, Response>() {
                     @Override
