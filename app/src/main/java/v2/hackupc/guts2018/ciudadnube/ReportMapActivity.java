@@ -15,6 +15,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -79,7 +81,7 @@ public class ReportMapActivity extends FragmentActivity implements OnMapReadyCal
                                         // configure the intent as appropriate
 
                                         // add the location data
-                                        i.putExtra("PROBLEM", location);
+                                        i.putExtra("LOCATION", location);
                                         startActivity(i);
                                     } else {
                                         Log.d(TAG, null);
@@ -160,6 +162,12 @@ public class ReportMapActivity extends FragmentActivity implements OnMapReadyCal
                 mapFragment.getMapAsync(this);
                 break;
         }
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_report, menu);
+        return true;
     }
 }
