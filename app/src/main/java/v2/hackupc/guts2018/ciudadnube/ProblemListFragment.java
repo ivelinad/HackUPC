@@ -21,7 +21,7 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ProblemFragment extends Fragment {
+public class ProblemListFragment extends Fragment {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private static final String PROBLEMS = "PROBLEMS";
@@ -33,11 +33,11 @@ public class ProblemFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ProblemFragment() {
+    public ProblemListFragment() {
     }
 
-    public static ProblemFragment newInstance(int columnCount, ArrayList<Problem> problems) {
-        ProblemFragment fragment = new ProblemFragment();
+    public static ProblemListFragment newInstance(int columnCount, ArrayList<Problem> problems) {
+        ProblemListFragment fragment = new ProblemListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         args.putSerializable(PROBLEMS, problems);

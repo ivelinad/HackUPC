@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import v2.hackupc.guts2018.ciudadnube.Objects.Problem;
-import v2.hackupc.guts2018.ciudadnube.ProblemFragment.OnListFragmentInteractionListener;
+import v2.hackupc.guts2018.ciudadnube.ProblemListFragment.OnListFragmentInteractionListener;
 
 import java.util.List;
 

@@ -3,18 +3,16 @@ package v2.hackupc.guts2018.ciudadnube;
 * Map view of problems
 * */
 
-import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
@@ -25,8 +23,8 @@ import java.util.ArrayList;
 import v2.hackupc.guts2018.ciudadnube.Objects.Problem;
 
 
-public class ProblemsMapActivity extends FragmentActivity implements MapFragment.OnFragmentInteractionListener,
-        ProblemFragment.OnListFragmentInteractionListener {
+public class ProblemsViewActivity extends FragmentActivity implements MapFragment.OnFragmentInteractionListener,
+        ProblemListFragment.OnListFragmentInteractionListener {
 
     private GoogleMap mMap;
     private boolean showingMap = true;
@@ -38,12 +36,24 @@ public class ProblemsMapActivity extends FragmentActivity implements MapFragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_problems_map);
+        setContentView(R.layout.activity_problems_view);
 
         fragmentContainer = findViewById(R.id.fragment_container);
 
 
         final ArrayList<Problem> problems = new ArrayList<>();
+
+        Location dummyLoc = new Location("");
+        dummyLoc.setLatitude(0.0d);//your coords of course
+        dummyLoc.setLongitude(0.0d);
+
+        for(int i = 0; i<12;i++){
+            Problem problem = new Problem(dummyLoc);
+            problem.setDescription("DUMMMY DEEEEEEEEEEEEESCRIPTIONNNNNNNNNNNNNNNNNNNNNNN");
+            problem.setImageUrl("https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png");
+            problems.add(problem);
+        }
+
 
         MapFragment mapFragment = MapFragment.newInstance(problems);
         openFragment(mapFragment, MAP_FRAGMENT);
@@ -56,7 +66,7 @@ public class ProblemsMapActivity extends FragmentActivity implements MapFragment
                 if(showingMap){
                     Fragment problemFragment = getSupportFragmentManager().findFragmentByTag(PROBLEM_FRAGMENT);
                     if(problemFragment == null){
-                        problemFragment = ProblemFragment.newInstance(1, problems);
+                        problemFragment = ProblemListFragment.newInstance(1, problems);
                     }
                     openFragment(problemFragment, PROBLEM_FRAGMENT);
                     showingMap = false;

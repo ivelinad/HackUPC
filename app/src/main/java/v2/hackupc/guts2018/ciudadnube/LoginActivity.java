@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
                         String password = passwordTv.getText().toString();
 
                         if(email.equals("trashman") && password.equals("a")){
-                            Intent i = new Intent(LoginActivity.this, ProblemsMapActivity.class);
+                            Intent i = new Intent(LoginActivity.this, ProblemsViewActivity.class);
                             startActivity(i);
                         }
 

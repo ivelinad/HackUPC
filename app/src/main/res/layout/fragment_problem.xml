@@ -9,12 +9,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
+        android:background="@android:drawable/ic_menu_gallery"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:scrollHorizontally="true"
+        android:ellipsize="end"
+        android:maxLines="3"
         android:layout_margin="@dimen/text_margin"
+        android:text="@string/placeholder_for_description"
         android:textAppearance="?attr/textAppearanceListItem" />
 </LinearLayout>

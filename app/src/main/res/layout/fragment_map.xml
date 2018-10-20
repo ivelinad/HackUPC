@@ -19,7 +19,7 @@
         map:layout_constraintHorizontal_bias="0.0"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintVertical_bias="0.0"
-        tools:context=".ProblemsMapActivity" />
+        tools:context=".ProblemsViewActivity" />
 
     <Switch
         android:id="@+id/switch1"

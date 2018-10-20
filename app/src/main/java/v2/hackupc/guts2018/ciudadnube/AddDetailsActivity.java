@@ -30,6 +30,7 @@ public class AddDetailsActivity extends AppCompatActivity {
     private final static int SELECT_PICTURE = 0;
     private ImageView imageView;
     private EditText descriptionTextView;
+    private Uri selectedImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +72,7 @@ public class AddDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 problem.setDescription(descriptionTextView.getText().toString());
+                problem.setImagePath(selectedImageUri.getPath());
 
                 // send stuff to amazon boi
             }
@@ -90,7 +92,7 @@ public class AddDetailsActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
-                Uri selectedImageUri = data.getData();
+                selectedImageUri = data.getData();
                 Picasso.get().load(selectedImageUri).fit()
                         .placeholder(android.R.drawable.ic_menu_gallery)
                         .error(R.drawable.ic_broken_image)

@@ -42,7 +42,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".ProblemsMapActivity"
+            android:name=".ProblemsViewActivity"
             android:label="@string/title_activity_problems_map"/>
         <activity
             android:name=".ReportMapActivity"
