@@ -5,15 +5,10 @@ package v2.hackupc.guts2018.ciudadnube;
  */
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
@@ -37,17 +33,8 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.squareup.picasso.Picasso;
-import com.amazonaws.mobile.config.AWSConfiguration;
-import com.amazonaws.mobileconnectors.s3.transferutility.*;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import v2.hackupc.guts2018.ciudadnube.Algorithms.ImageFilePath;
 import v2.hackupc.guts2018.ciudadnube.Objects.Problem;
@@ -108,6 +95,8 @@ public class AddDetailsActivity extends AppCompatActivity {
 
         final MyInterface myInterface = factory.build(MyInterface.class);
 
+        final ProgressBar uploadBar = findViewById(R.id.progressBar);
+
         Button confirm = findViewById(R.id.confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,6 +126,7 @@ public class AddDetailsActivity extends AppCompatActivity {
                                     file);
 
                     Toast.makeText(AddDetailsActivity.this, "Please Wait", Toast.LENGTH_SHORT).show();
+                    uploadBar.setVisibility(View.VISIBLE);
                     // Attach a listener to the observer to get state update and progress notifications
                     uploadObserver.setTransferListener(new TransferListener() {
 
@@ -171,6 +161,7 @@ public class AddDetailsActivity extends AppCompatActivity {
                                         Toast.makeText(AddDetailsActivity.this, "Location added", Toast.LENGTH_LONG).show();
                                         // go back to previous activity
                                         Intent i = new Intent(AddDetailsActivity.this, ReportMapActivity.class);
+                                        uploadBar.setVisibility(View.GONE);
                                         startActivity(i);
                                     }
                                 }.execute(r);
@@ -179,7 +170,9 @@ public class AddDetailsActivity extends AppCompatActivity {
 
                         @Override
                         public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-
+                            float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
+                            int percentDone = (int)percentDonef;
+                            uploadBar.setProgress(percentDone);
                         }
 
                         @Override
