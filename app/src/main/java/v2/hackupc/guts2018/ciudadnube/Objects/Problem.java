@@ -8,6 +8,7 @@ import android.util.Base64;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
+import java.net.URI;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
@@ -24,7 +25,6 @@ public class Problem implements  Serializable, ClusterItem {
         this.lng = location.getLongitude();
         this.description = "";
     }
-
     public String getImagePath() {
         return imagePath;
     }

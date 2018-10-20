@@ -58,6 +58,7 @@ public class ReportMapActivity extends AppCompatActivity
     String[] PERMISSIONS = {
             android.Manifest.permission.ACCESS_FINE_LOCATION,
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
     };
 
 
