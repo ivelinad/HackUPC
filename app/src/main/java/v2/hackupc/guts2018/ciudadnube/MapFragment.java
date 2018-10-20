@@ -55,7 +55,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private static boolean permissionsGranted = false;
     private static final int PERMISSION_ALL = 1;
     private FusedLocationProviderClient mFusedLocationClient;
-    private HashMap<Marker,Problem> markers;
     // Declare a variable for the cluster manager.
     private ClusterManager<Problem> mClusterManager;
 
@@ -126,6 +125,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    public void updateMarkers(ArrayList<Problem> problems){
+        this.problems = problems;
+        mClusterManager.clearItems();
+        mClusterManager.addItems(problems);
+        mClusterManager.cluster();
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -161,8 +167,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         }
                     });
         }
-
-        markers = new HashMap<>();
 
         // Initialize the manager with the context and the map.
         // (Activity extends context, so we can pass 'this' in the constructor.)
