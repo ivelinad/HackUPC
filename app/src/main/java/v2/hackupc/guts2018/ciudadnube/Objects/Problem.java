@@ -42,7 +42,7 @@ public class Problem{
     }
 
     public String getImageAsString(){
-        Bitmap bm = BitmapFactory.decodeFile("/path/to/image.jpg");
+        Bitmap bm = BitmapFactory.decodeFile(imagePath);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
         byte[] b = baos.toByteArray();

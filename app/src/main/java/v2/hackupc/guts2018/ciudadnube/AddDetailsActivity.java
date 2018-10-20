@@ -4,12 +4,14 @@ package v2.hackupc.guts2018.ciudadnube;
  *
  */
 
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,12 +19,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
+import com.amazonaws.mobileconnectors.lambdainvoker.LambdaInvokerFactory;
+import com.amazonaws.regions.Regions;
 import com.squareup.picasso.Picasso;
 
 import v2.hackupc.guts2018.ciudadnube.Objects.Problem;
-
-import static java.security.AccessController.getContext;
 
 public class AddDetailsActivity extends AppCompatActivity {
 
@@ -32,6 +37,7 @@ public class AddDetailsActivity extends AppCompatActivity {
     private EditText descriptionTextView;
     private Uri selectedImageUri;
 
+    @SuppressLint("StaticFieldLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +73,17 @@ public class AddDetailsActivity extends AppCompatActivity {
                     }
                 });
 
+        // Initialize the Amazon Cognito credentials provider
+        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
+                getApplicationContext(),
+                "us-east-1:30b87aaa-5633-4ef0-bae2-4d36c3ab731d", // Identity pool ID
+                Regions.US_EAST_1 // Region
+        );
+
+        LambdaInvokerFactory factory = LambdaInvokerFactory.builder().context(getApplicationContext()).region(Regions.US_EAST_1).credentialsProvider(credentialsProvider).build();
+
+        final MyInterface myInterface = factory.build(MyInterface.class);
+
         Button confirm = findViewById(R.id.confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +92,32 @@ public class AddDetailsActivity extends AppCompatActivity {
                 problem.setImagePath(selectedImageUri.getPath());
 
                 // send stuff to amazon boi
+                Request r = new Request(problem.getLat(), problem.getLng(), problem.getDescription(), problem.getImageAsString(), "POST");
+
+                new AsyncTask<Request, Void, Response>() {
+                    @Override
+                    protected Response doInBackground(Request... params) {
+                        // invoke "echo" method. In case it fails, it will throw a
+                        // LambdaFunctionException.
+                        try {
+                            return myInterface.SaveLocationToDB(params[0]);
+                        } catch (LambdaFunctionException lfe) {
+                            Log.e("Failed to invoke echo", "Failed to invoke echo", lfe);
+                            return null;
+                        }
+                    }
+
+                    @Override
+                    protected void onPostExecute(Response result) {
+                        if (result == null) {
+                            Log.d("RETURN", "NO DATA RETURNED");
+                            return;
+                        }
+
+                        // Do a toast
+                        Toast.makeText(AddDetailsActivity.this, result.getResponse(), Toast.LENGTH_LONG).show();
+                    }
+                }.execute(r);
             }
         });
 

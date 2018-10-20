@@ -106,44 +106,6 @@ public class ReportMapActivity extends AppCompatActivity
             }
         });
 
-//        LambdaInvokerFactory.builder().context(ReportMapActivity.this).region(Regions.US_EAST_1).credentialsProvider(null).build();
-        // Initialize the Amazon Cognito credentials provider
-        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
-                getApplicationContext(),
-                "us-east-1:30b87aaa-5633-4ef0-bae2-4d36c3ab731d", // Identity pool ID
-                Regions.US_EAST_1 // Region
-        );
-
-        LambdaInvokerFactory factory = LambdaInvokerFactory.builder().context(getApplicationContext()) .region(Regions.US_EAST_1) .credentialsProvider(credentialsProvider) .build();
-
-        final MyInterface myInterface = factory.build(MyInterface.class);
-        Request r = new Request(1.0, 2.0, "Description", "URL", "POST");
-
-        new AsyncTask<Request, Void, Response>() {
-            @Override
-            protected Response doInBackground(Request... params) {
-                // invoke "echo" method. In case it fails, it will throw a
-                // LambdaFunctionException.
-                try {
-                    return myInterface.SaveLocationToDB(params[0]);
-                } catch (LambdaFunctionException lfe) {
-                    Log.e(TAG, "Failed to invoke echo", lfe);
-                    return null;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Response result) {
-                if (result == null) {
-                    Log.d("RETURN", "NO DATA RETURNED");
-                    return;
-                }
-
-                // Do a toast
-                Toast.makeText(ReportMapActivity.this, result.getResp(), Toast.LENGTH_LONG).show();
-            }
-        }.execute(r);
-
     }
 
 
