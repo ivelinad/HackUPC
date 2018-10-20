@@ -37,6 +37,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -60,6 +61,7 @@ public class ReportMapActivity extends AppCompatActivity
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
             android.Manifest.permission.READ_EXTERNAL_STORAGE,
     };
+    private Marker marker;
 
 
     @SuppressLint("StaticFieldLeak")
@@ -81,6 +83,19 @@ public class ReportMapActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(marker != null){
+                    Intent i = new Intent(ReportMapActivity.this, AddDetailsActivity.class);
+                    // configure the intent as appropriate
+                    Location location = new Location("");
+                    location.setLatitude(marker.getPosition().latitude);
+                    location.setLongitude(marker.getPosition().longitude);
+                    // add the location data
+                    i.putExtra("LOCATION", location);
+                    startActivity(i);
+                }
+
+                /*
                 if(mMap != null) {
 
                     mFusedLocationClient.getLastLocation()
@@ -90,10 +105,7 @@ public class ReportMapActivity extends AppCompatActivity
                                     // Got last known location. In some rare situations this can be null.
                                     if (location != null) {
                                         Intent i = new Intent(ReportMapActivity.this, AddDetailsActivity.class);
-
-
-
-                                        // configure the intent as appropriate
+                                       // configure the intent as appropriate
 
                                         // add the location data
                                         i.putExtra("LOCATION", location);
@@ -104,6 +116,7 @@ public class ReportMapActivity extends AppCompatActivity
                                 }
                             });
                 }
+                */
             }
         });
 
@@ -128,7 +141,15 @@ public class ReportMapActivity extends AppCompatActivity
         if(permissionsGranted) {
 
             mMap.setMyLocationEnabled(true);
-
+            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    mMap.clear();
+                    marker = mMap.addMarker(new MarkerOptions()
+                            .position(latLng).draggable(true));
+                }
+            });
+            
             mFusedLocationClient.getLastLocation()
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                         @Override
@@ -144,6 +165,8 @@ public class ReportMapActivity extends AppCompatActivity
                                         .tilt(40)                   // Sets the tilt of the camera to 40 degrees
                                         .build();                   // Creates a CameraPosition from the builder
                                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                                marker = mMap.addMarker(new MarkerOptions()
+                                                .position(new LatLng(location.getLatitude(), location.getLongitude())).draggable(true));
                             } else {
                                 Log.d(TAG, null);
                             }
