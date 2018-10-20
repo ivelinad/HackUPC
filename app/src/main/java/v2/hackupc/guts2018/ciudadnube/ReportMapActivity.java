@@ -94,29 +94,7 @@ public class ReportMapActivity extends AppCompatActivity
                     i.putExtra("LOCATION", location);
                     startActivity(i);
                 }
-
-                /*
-                if(mMap != null) {
-
-                    mFusedLocationClient.getLastLocation()
-                            .addOnSuccessListener(ReportMapActivity.this, new OnSuccessListener<Location>() {
-                                @Override
-                                public void onSuccess(Location location) {
-                                    // Got last known location. In some rare situations this can be null.
-                                    if (location != null) {
-                                        Intent i = new Intent(ReportMapActivity.this, AddDetailsActivity.class);
-                                       // configure the intent as appropriate
-
-                                        // add the location data
-                                        i.putExtra("LOCATION", location);
-                                        startActivity(i);
-                                    } else {
-                                        Log.d(TAG, null);
-                                    }
-                                }
-                            });
-                }
-                */
+                
             }
         });
 
