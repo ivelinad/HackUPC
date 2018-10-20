@@ -28,6 +28,7 @@ import com.amazonaws.regions.Regions;
 import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import v2.hackupc.guts2018.ciudadnube.Objects.Problem;
 
@@ -62,6 +63,7 @@ public class ProblemsViewActivity extends FragmentActivity implements MapFragmen
         final MyInterface myInterface = factory.build(MyInterface.class);
 
         AllDataRequest dataRequest = new AllDataRequest();
+        final ArrayList<Problem> problems = new ArrayList<>();
 
 //        Request r = new Request(problem.getLat(), problem.getLng(), problem.getDescription(), "test", "POST", timeStamp);
 
@@ -84,38 +86,42 @@ public class ProblemsViewActivity extends FragmentActivity implements MapFragmen
                     Log.d("RETURN", "NO DATA RETURNED");
                     return;
                 }
-
+                for (Object response: result.getResponse()){
+                    response = (AllDataResponse) response;
+                    Log.d("response", response.toString());
+                    problems.add(new Problem(new Location("")));
+                }
                 // Do a toast
-                Toast.makeText(ProblemsViewActivity.this, result.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(ProblemsViewActivity.this, Arrays.toString(result.getResponse().toArray()), Toast.LENGTH_LONG).show();
             }
         }.execute(dataRequest);
 
 
         // TODO remove dummy data
-        final ArrayList<Problem> problems = new ArrayList<>();
 
 
 
-        for(int i = 0; i<12;i++){
-            Location dummyLoc = new Location("");
-            dummyLoc.setLatitude(0.0d +i*0.0001);//your coords of course
-            dummyLoc.setLongitude(0.0d+i*0.001);
 
-            Problem problem = new Problem(dummyLoc);
-            problem.setDescription("DUMMMY DEEEEEEEEEEEEESCRIPTIONNNNNNNNNNNNNNNNNNNNNNN");
-            problem.setImageUrl("https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png");
-            problems.add(problem);
-        }
-
-        for(int i = 0; i<40;i++){
-            Location dummyLoc2 = new Location("");
-            dummyLoc2.setLatitude(41.3918234d+i*0.003);//your coords of course
-            dummyLoc2.setLongitude(2.1155787d-i*0.0004);
-            Problem problem = new Problem(dummyLoc2);
-            problem.setDescription("DUMMMY DEEEEEEEEEEEEESCRIPTIONNNNNNNNNNNNNNNNNNNNNNN");
-            problem.setImageUrl("https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png");
-            problems.add(problem);
-        }
+//        for(int i = 0; i<12;i++){
+//            Location dummyLoc = new Location("");
+//            dummyLoc.setLatitude(0.0d +i*0.0001);//your coords of course
+//            dummyLoc.setLongitude(0.0d+i*0.001);
+//
+//            Problem problem = new Problem(dummyLoc);
+//            problem.setDescription("DUMMMY DEEEEEEEEEEEEESCRIPTIONNNNNNNNNNNNNNNNNNNNNNN");
+//            problem.setImageUrl("https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png");
+//            problems.add(problem);
+//        }
+//
+//        for(int i = 0; i<40;i++){
+//            Location dummyLoc2 = new Location("");
+//            dummyLoc2.setLatitude(41.3918234d+i*0.003);//your coords of course
+//            dummyLoc2.setLongitude(2.1155787d-i*0.0004);
+//            Problem problem = new Problem(dummyLoc2);
+//            problem.setDescription("DUMMMY DEEEEEEEEEEEEESCRIPTIONNNNNNNNNNNNNNNNNNNNNNN");
+//            problem.setImageUrl("https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png");
+//            problems.add(problem);
+//        }
         // TODO----------------------
 
 
