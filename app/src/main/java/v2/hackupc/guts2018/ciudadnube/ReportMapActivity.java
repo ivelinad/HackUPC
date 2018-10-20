@@ -4,10 +4,12 @@ package v2.hackupc.guts2018.ciudadnube;
  * */
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Debug;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -20,7 +22,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
+import com.amazonaws.mobileconnectors.lambdainvoker.LambdaInvokerFactory;
+import com.amazonaws.regions.Regions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,6 +39,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.util.Arrays;
 
 import v2.hackupc.guts2018.ciudadnube.Objects.Problem;
 
@@ -51,6 +61,7 @@ public class ReportMapActivity extends AppCompatActivity
     };
 
 
+    @SuppressLint("StaticFieldLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +105,44 @@ public class ReportMapActivity extends AppCompatActivity
                 }
             }
         });
+
+//        LambdaInvokerFactory.builder().context(ReportMapActivity.this).region(Regions.US_EAST_1).credentialsProvider(null).build();
+        // Initialize the Amazon Cognito credentials provider
+        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
+                getApplicationContext(),
+                "us-east-1:30b87aaa-5633-4ef0-bae2-4d36c3ab731d", // Identity pool ID
+                Regions.US_EAST_1 // Region
+        );
+
+        LambdaInvokerFactory factory = LambdaInvokerFactory.builder().context(getApplicationContext()) .region(Regions.US_EAST_1) .credentialsProvider(credentialsProvider) .build();
+
+        final MyInterface myInterface = factory.build(MyInterface.class);
+        Request r = new Request(1.0, 2.0, "Description", "URL", "POST");
+
+        new AsyncTask<Request, Void, Response>() {
+            @Override
+            protected Response doInBackground(Request... params) {
+                // invoke "echo" method. In case it fails, it will throw a
+                // LambdaFunctionException.
+                try {
+                    return myInterface.SaveLocationToDB(params[0]);
+                } catch (LambdaFunctionException lfe) {
+                    Log.e(TAG, "Failed to invoke echo", lfe);
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Response result) {
+                if (result == null) {
+                    Log.d("RETURN", "NO DATA RETURNED");
+                    return;
+                }
+
+                // Do a toast
+                Toast.makeText(ReportMapActivity.this, result.getResp(), Toast.LENGTH_LONG).show();
+            }
+        }.execute(r);
 
     }
 

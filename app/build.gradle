@@ -32,4 +32,10 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.amazonaws:aws-android-sdk-core:2.7.0'
+    implementation 'com.amazonaws:aws-android-sdk-s3:2.7.0'
+    implementation 'com.amazonaws:aws-android-sdk-ddb:2.7.0'
+    implementation 'com.amazonaws:aws-android-sdk-lambda:2.7.0'
+    implementation 'com.amazonaws:aws-android-sdk-apigateway-core:2.7.0'
+    implementation ('com.amazonaws:aws-android-sdk-auth-userpools:2.7.0@aar') { transitive = true }
 }
