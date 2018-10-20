@@ -8,7 +8,7 @@ import android.util.Base64;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
-public class Problem{
+public class Problem implements  Serializable{
     private final double lat;
     private final double lng;
     private String description;
@@ -42,7 +42,7 @@ public class Problem{
     }
 
     public String getImageAsString(){
-        Bitmap bm = BitmapFactory.decodeFile("/path/to/image.jpg");
+        Bitmap bm = BitmapFactory.decodeFile(imagePath);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
         byte[] b = baos.toByteArray();
