@@ -37,6 +37,9 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 
 import v2.hackupc.guts2018.ciudadnube.Algorithms.ImageFilePath;
+import v2.hackupc.guts2018.ciudadnube.Lambda.MyInterface;
+import v2.hackupc.guts2018.ciudadnube.Lambda.Request;
+import v2.hackupc.guts2018.ciudadnube.Lambda.Response;
 import v2.hackupc.guts2018.ciudadnube.Objects.Problem;
 
 public class AddDetailsActivity extends AppCompatActivity {
