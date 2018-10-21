@@ -127,9 +127,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     public void updateMarkers(ArrayList<Problem> problems){
         this.problems = problems;
-        mClusterManager.clearItems();
-        mClusterManager.addItems(problems);
-        mClusterManager.cluster();
+        if(mClusterManager!=null) {
+            mClusterManager.clearItems();
+            mClusterManager.addItems(problems);
+            mClusterManager.cluster();
+        }
     }
 
     @Override
