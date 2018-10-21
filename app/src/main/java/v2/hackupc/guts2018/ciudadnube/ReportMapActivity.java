@@ -125,7 +125,7 @@ public class ReportMapActivity extends AppCompatActivity
                 public void onMapClick(LatLng latLng) {
                     mMap.clear();
                     marker = mMap.addMarker(new MarkerOptions()
-                            .position(latLng).draggable(true));
+                            .position(latLng).draggable(true).title("Report problem here"));
                 }
             });
             
@@ -145,7 +145,7 @@ public class ReportMapActivity extends AppCompatActivity
                                         .build();                   // Creates a CameraPosition from the builder
                                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                                 marker = mMap.addMarker(new MarkerOptions()
-                                                .position(new LatLng(location.getLatitude(), location.getLongitude())).draggable(true));
+                                                .position(new LatLng(location.getLatitude(), location.getLongitude())).draggable(true).title("Report problem here"));
                             } else {
                                 Log.d(TAG, null);
                             }
