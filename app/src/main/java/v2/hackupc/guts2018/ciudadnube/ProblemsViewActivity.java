@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,7 +49,6 @@ public class ProblemsViewActivity extends FragmentActivity implements MapFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_problems_view);
-        setTitle("Issues Near You");
         final ArrayList<Problem> problems = new ArrayList<>();
         fragmentContainer = findViewById(R.id.fragment_container);
         final MapFragment mapFragment = MapFragment.newInstance(problems);

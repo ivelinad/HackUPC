@@ -214,7 +214,7 @@ public class AddDetailsActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
                 selectedImageUri = data.getData();
-                Picasso.get().load(selectedImageUri).fit()
+                Picasso.get().load(selectedImageUri).centerCrop().fit()
                         .placeholder(android.R.drawable.ic_menu_gallery)
                         .error(R.drawable.ic_broken_image)
                         .into(imageView);

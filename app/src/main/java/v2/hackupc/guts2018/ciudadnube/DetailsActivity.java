@@ -22,6 +22,7 @@ public class DetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_details);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setTitle("This issue");
 
         Bundle b = getIntent().getExtras();
         if(b != null){

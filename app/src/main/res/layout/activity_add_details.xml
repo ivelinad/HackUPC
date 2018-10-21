@@ -7,16 +7,15 @@
     tools:context=".AddDetailsActivity">
 
 
-
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="200dp"
+        android:layout_width="0dp"
         android:layout_height="200dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
         android:contentDescription="@string/image_of_problem"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

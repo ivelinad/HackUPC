@@ -41,7 +41,7 @@ public class MyProblemRecyclerViewAdapter extends RecyclerView.Adapter<MyProblem
         holder.mItem = mValues.get(position);
         holder.mDescription.setText(mValues.get(position).getDescription());
         Log.d("mytag", mValues.get(position).getUrl());
-        Picasso.get().load(mValues.get(position).getUrl()).fit()
+        Picasso.get().load(mValues.get(position).getUrl()).centerCrop().fit()
                 .placeholder(android.R.drawable.ic_menu_gallery)
                 .error(R.drawable.ic_broken_image)
                 .into(holder.mImage);
