@@ -5,7 +5,6 @@ package v2.hackupc.guts2018.ciudadnube;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
@@ -19,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
@@ -27,14 +25,13 @@ import com.amazonaws.mobileconnectors.lambdainvoker.LambdaInvokerFactory;
 import com.amazonaws.regions.Regions;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import v2.hackupc.guts2018.ciudadnube.Objects.Problem;
+import v2.hackupc.guts2018.ciudadnube.Lambda.AllDataRequest;
+import v2.hackupc.guts2018.ciudadnube.Lambda.AllDataResponse;
+import v2.hackupc.guts2018.ciudadnube.Lambda.MyInterface;
 
 
 public class ProblemsViewActivity extends FragmentActivity implements MapFragment.OnFragmentInteractionListener,

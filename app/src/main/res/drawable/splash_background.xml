@@ -3,9 +3,13 @@
 
     <item android:drawable="@color/splashBackground" />
 
-    <!--item
+    <item
         android:gravity="center"
-        android:drawable="@drawable/ic_splash_screen_vector" /-->
+        android:drawable="@drawable/upclogo"
+        android:left="100dp"
+        android:right="100dp"
+
+        />
 
 </layer-list>
 

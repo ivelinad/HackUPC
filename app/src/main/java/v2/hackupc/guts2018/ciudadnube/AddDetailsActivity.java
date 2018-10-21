@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -44,7 +44,7 @@ public class AddDetailsActivity extends AppCompatActivity {
     public Problem problem;
     private final static int SELECT_PICTURE = 0;
     private ImageView imageView;
-    private TextInputEditText descriptionEditText;
+    private EditText descriptionTextView;
     private Uri selectedImageUri;
 
     @SuppressLint("StaticFieldLeak")
@@ -60,7 +60,7 @@ public class AddDetailsActivity extends AppCompatActivity {
             problem  = new Problem((Location)b.getParcelable("LOCATION"));
 
         imageView = findViewById(R.id.imageView);
-        descriptionEditText = findViewById(R.id.description);
+        descriptionTextView = findViewById(R.id.description);
 
         int productImageId = getResources().getIdentifier(
                 "ic_photo_placeholder", "drawable", getPackageName());
@@ -102,96 +102,91 @@ public class AddDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (descriptionEditText.getText().length() > 0) {
-                    if (selectedImageUri != null) {
+                if(descriptionTextView.getText().length() > 0 && selectedImageUri != null){
+                    problem.setDescription(descriptionTextView.getText().toString());
+                    problem.setImagePath(selectedImageUri.getPath());
 
-                        problem.setDescription(descriptionEditText.getText().toString());
-                        problem.setImagePath(selectedImageUri.getPath());
+                    final String timeStamp = String.valueOf(System.currentTimeMillis()); // name of file and also id of database entry
 
-                        final String timeStamp = String.valueOf(System.currentTimeMillis()); // name of file and also id of database entry
+                    TransferUtility transferUtility =
+                            TransferUtility.builder()
+                                    .context(getApplicationContext())
+                                    .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
+                                    .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
+                                    .build();
 
-                        TransferUtility transferUtility =
-                                TransferUtility.builder()
-                                        .context(getApplicationContext())
-                                        .awsConfiguration(AWSMobileClient.getInstance().getConfiguration())
-                                        .s3Client(new AmazonS3Client(AWSMobileClient.getInstance().getCredentialsProvider()))
-                                        .build();
-
-                        String realPath = ImageFilePath.getPath(AddDetailsActivity.this, selectedImageUri);
+                    String realPath = ImageFilePath.getPath(AddDetailsActivity.this, selectedImageUri);
 
 
-                        File file = new File(realPath);
+                    File file = new File(realPath);
 
-                        TransferObserver uploadObserver =
-                                transferUtility.upload(
-                                        timeStamp + ".jpg",
-                                        file);
+                    TransferObserver uploadObserver =
+                            transferUtility.upload(
+                                    timeStamp + ".jpg",
+                                    file);
 
-                        Toast.makeText(AddDetailsActivity.this, "Please Wait", Toast.LENGTH_SHORT).show();
-                        uploadBar.setVisibility(View.VISIBLE);
-                        // Attach a listener to the observer to get state update and progress notifications
-                        uploadObserver.setTransferListener(new TransferListener() {
+                    Toast.makeText(AddDetailsActivity.this, "Please Wait", Toast.LENGTH_SHORT).show();
+                    uploadBar.setVisibility(View.VISIBLE);
+                    // Attach a listener to the observer to get state update and progress notifications
+                    uploadObserver.setTransferListener(new TransferListener() {
 
-                            @Override
-                            public void onStateChanged(int id, TransferState state) {
-                                if (TransferState.COMPLETED == state) {
-                                    // Handle a completed upload.
+                        @Override
+                        public void onStateChanged(int id, TransferState state) {
+                            if (TransferState.COMPLETED == state) {
+                                // Handle a completed upload.
 
-                                    Request r = new Request(problem.getLat(), problem.getLng(), problem.getDescription(), timeStamp + ".jpg", timeStamp);
+                                Request r = new Request(problem.getLat(), problem.getLng(), problem.getDescription(), "https://s3.amazonaws.com/hackupc-images/"+timeStamp+".jpg", timeStamp);
 
-                                    new AsyncTask<Request, Void, Response>() {
-                                        @Override
-                                        protected Response doInBackground(Request... params) {
-                                            // invoke "echo" method. In case it fails, it will throw a
-                                            // LambdaFunctionException.
-                                            try {
-                                                return myInterface.SaveLocationToDB(params[0]);
-                                            } catch (LambdaFunctionException lfe) {
-                                                Log.e("Failed to invoke echo", "Failed to invoke echo", lfe);
-                                                return null;
-                                            }
+                                new AsyncTask<Request, Void, Response>() {
+                                    @Override
+                                    protected Response doInBackground(Request... params) {
+                                        // invoke "echo" method. In case it fails, it will throw a
+                                        // LambdaFunctionException.
+                                        try {
+                                            return myInterface.SaveLocationToDB(params[0]);
+                                        } catch (LambdaFunctionException lfe) {
+                                            Log.e("Failed to invoke echo", "Failed to invoke echo", lfe);
+                                            return null;
+                                        }
+                                    }
+
+                                    @Override
+                                    protected void onPostExecute(Response result) {
+                                        if (result == null) {
+                                            Log.d("RETURN", "NO DATA RETURNED");
+                                            return;
                                         }
 
-                                        @Override
-                                        protected void onPostExecute(Response result) {
-                                            if (result == null) {
-                                                Log.d("RETURN", "NO DATA RETURNED");
-                                                return;
-                                            }
-
-                                            // Do a toast
-                                            Toast.makeText(AddDetailsActivity.this, "Location added", Toast.LENGTH_LONG).show();
-                                            // go back to previous activity
-                                            Intent i = new Intent(AddDetailsActivity.this, ReportMapActivity.class);
-                                            uploadBar.setVisibility(View.GONE);
-                                            startActivity(i);
-                                        }
-                                    }.execute(r);
-                                }
+                                        // Do a toast
+                                        Toast.makeText(AddDetailsActivity.this, "Location added", Toast.LENGTH_LONG).show();
+                                        // go back to previous activity
+                                        Intent i = new Intent(AddDetailsActivity.this, ReportMapActivity.class);
+                                        uploadBar.setVisibility(View.GONE);
+                                        startActivity(i);
+                                    }
+                                }.execute(r);
                             }
+                        }
 
-                            @Override
-                            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                                float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
-                                int percentDone = (int) percentDonef;
-                                uploadBar.setProgress(percentDone);
-                            }
+                        @Override
+                        public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                            float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
+                            int percentDone = (int)percentDonef;
+                            uploadBar.setProgress(percentDone);
+                        }
 
-                            @Override
-                            public void onError(int id, Exception ex) {
-                                // Handle errors
-                                Log.e("UploadError", "UploadError", ex);
-                            }
+                        @Override
+                        public void onError(int id, Exception ex) {
+                            // Handle errors
+                            Log.e("UploadError", "UploadError", ex);
+                        }
 
-                        });
-                    } else {
-                        Toast.makeText(getApplicationContext(), getString(R.string.missing_image), Toast.LENGTH_LONG).show();
-                    }
+                    });
                 } else {
-                    descriptionEditText.setError("Please write short description");
+                    Toast.makeText(getApplicationContext(), getString(R.string.missing_fields), Toast.LENGTH_LONG).show();
                 }
-            }});
-
+            }
+        });
 
         Button cancel = findViewById(R.id.cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
