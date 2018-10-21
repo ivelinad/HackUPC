@@ -48,6 +48,7 @@ public class ProblemsViewActivity extends FragmentActivity implements MapFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_problems_view);
+        setTitle("Issues Near You");
         final ArrayList<Problem> problems = new ArrayList<>();
         fragmentContainer = findViewById(R.id.fragment_container);
         final MapFragment mapFragment = MapFragment.newInstance(problems);

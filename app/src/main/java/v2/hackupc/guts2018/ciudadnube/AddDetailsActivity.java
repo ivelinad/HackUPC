@@ -58,7 +58,7 @@ public class AddDetailsActivity extends AppCompatActivity {
         AWSMobileClient.getInstance().initialize(this).execute();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_details);
-
+        setTitle("Report Issue");
 
         Bundle b = getIntent().getExtras();
         if(b != null)
