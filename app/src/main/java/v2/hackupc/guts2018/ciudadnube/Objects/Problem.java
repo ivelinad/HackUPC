@@ -8,7 +8,6 @@ import android.util.Base64;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
-import java.net.URI;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
@@ -16,7 +15,7 @@ public class Problem implements  Serializable, ClusterItem {
     private final double lat;
     private final double lng;
     private String description;
-    private String imageUrl;
+    private String url;
     private String imagePath;
 
 
@@ -25,6 +24,7 @@ public class Problem implements  Serializable, ClusterItem {
         this.lng = location.getLongitude();
         this.description = "";
     }
+
     public String getImagePath() {
         return imagePath;
     }
@@ -41,8 +41,8 @@ public class Problem implements  Serializable, ClusterItem {
         return lat;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public void setImagePath(String imagePath) {
@@ -62,9 +62,9 @@ public class Problem implements  Serializable, ClusterItem {
         return lng;
     }
 
-    public String getImageUrl() {
+    public String getUrl() {
         // hackathon solution lol
-        return "https://s3.amazonaws.com/hackupc-images/" + imageUrl;
+        return "https://s3.amazonaws.com/hackupc-images/" + url;
     }
 
     @Override

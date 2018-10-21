@@ -3,6 +3,7 @@ package v2.hackupc.guts2018.ciudadnube;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -69,6 +70,8 @@ public class ProblemListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
+                    DividerItemDecoration.VERTICAL));
             recyclerView.setAdapter(new MyProblemRecyclerViewAdapter(problems, mListener));
         }
         return view;

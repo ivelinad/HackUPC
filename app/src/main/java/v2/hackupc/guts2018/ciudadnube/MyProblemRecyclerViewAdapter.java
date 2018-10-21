@@ -1,6 +1,7 @@
 package v2.hackupc.guts2018.ciudadnube;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,8 @@ public class MyProblemRecyclerViewAdapter extends RecyclerView.Adapter<MyProblem
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mDescription.setText(mValues.get(position).getDescription());
-        Picasso.get().load(mValues.get(position).getImageUrl()).fit()
+        Log.d("mytag", mValues.get(position).getUrl());
+        Picasso.get().load(mValues.get(position).getUrl()).fit()
                 .placeholder(android.R.drawable.ic_menu_gallery)
                 .error(R.drawable.ic_broken_image)
                 .into(holder.mImage);

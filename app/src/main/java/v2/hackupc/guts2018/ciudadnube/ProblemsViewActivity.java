@@ -93,6 +93,7 @@ public class ProblemsViewActivity extends FragmentActivity implements MapFragmen
                 for (Object response: result.getResponse()){
                     Log.d("mytag", response.toString());
                     Problem problem = new Gson().fromJson(response.toString(),Problem.class);
+                    Log.d("linkszzz", problem.getUrl());
                     problems.add(problem);
                     mapFragment.updateMarkers(problems);
                 }

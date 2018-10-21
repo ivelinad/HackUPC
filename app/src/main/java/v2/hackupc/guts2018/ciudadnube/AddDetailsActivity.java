@@ -37,6 +37,9 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 
 import v2.hackupc.guts2018.ciudadnube.Algorithms.ImageFilePath;
+import v2.hackupc.guts2018.ciudadnube.Lambda.MyInterface;
+import v2.hackupc.guts2018.ciudadnube.Lambda.Request;
+import v2.hackupc.guts2018.ciudadnube.Lambda.Response;
 import v2.hackupc.guts2018.ciudadnube.Objects.Problem;
 
 public class AddDetailsActivity extends AppCompatActivity {
@@ -135,7 +138,7 @@ public class AddDetailsActivity extends AppCompatActivity {
                             if (TransferState.COMPLETED == state) {
                                 // Handle a completed upload.
 
-                                Request r = new Request(problem.getLat(), problem.getLng(), problem.getDescription(), "https://s3.amazonaws.com/hackupc-images/"+timeStamp+".jpg", timeStamp);
+                                Request r = new Request(problem.getLat(), problem.getLng(), problem.getDescription(), timeStamp+".jpg", timeStamp);
 
                                 new AsyncTask<Request, Void, Response>() {
                                     @Override
