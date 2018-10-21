@@ -17,6 +17,7 @@ public class Problem implements  Serializable, ClusterItem {
     private String description;
     private String url;
     private String imagePath;
+    private String id;
 
 
     public Problem(Location location){
@@ -41,8 +42,8 @@ public class Problem implements  Serializable, ClusterItem {
         return lat;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public String getID(){
+        return url.substring(0,url.length()-4);
     }
 
     public void setImagePath(String imagePath) {
