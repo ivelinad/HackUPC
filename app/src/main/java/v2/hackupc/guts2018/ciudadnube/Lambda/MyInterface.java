@@ -10,4 +10,7 @@ public interface MyInterface {
 
     @LambdaFunction
     AllDataResponse GetAllData(AllDataRequest request);
+
+    @LambdaFunction
+    SolveIssueResponse SolveIssue(SolveIssueRequest request);
 }
