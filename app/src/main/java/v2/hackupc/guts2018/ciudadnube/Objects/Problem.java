@@ -63,7 +63,8 @@ public class Problem implements  Serializable, ClusterItem {
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        // hackathon solution lol
+        return "https://s3.amazonaws.com/hackupc-images/" + imageUrl;
     }
 
     @Override

@@ -137,7 +137,7 @@ public class AddDetailsActivity extends AppCompatActivity {
                                 if (TransferState.COMPLETED == state) {
                                     // Handle a completed upload.
 
-                                    Request r = new Request(problem.getLat(), problem.getLng(), problem.getDescription(), "https://s3.amazonaws.com/hackupc-images/" + timeStamp + ".jpg", timeStamp);
+                                    Request r = new Request(problem.getLat(), problem.getLng(), problem.getDescription(), timeStamp + ".jpg", timeStamp);
 
                                     new AsyncTask<Request, Void, Response>() {
                                         @Override

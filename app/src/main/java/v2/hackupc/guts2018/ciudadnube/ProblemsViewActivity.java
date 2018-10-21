@@ -91,8 +91,10 @@ public class ProblemsViewActivity extends FragmentActivity implements MapFragmen
                     Log.d("RETURN", "NO DATA RETURNED");
                     return;
                 }
-                for (Object response: result.getResponse()){
+                Log.d("mytag", result.getResponse().toString());
 
+                for (Object response: result.getResponse()){
+                    Log.d("mytag", response.toString());
                     Problem problem = new Gson().fromJson(response.toString(),Problem.class);
                     problems.add(problem);
                     mapFragment.updateMarkers(problems);
